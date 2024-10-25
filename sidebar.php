@@ -7,41 +7,47 @@
     <!-- Members Dropdown -->
     <a href="#membersSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-users"></i> Members</a>
     <ul class="collapse list-unstyled" id="membersSubmenu">
-        <li>
-            <a href="members_women.php"><i class="fas fa-female"></i> Women</a>
-        </li>
-        <li>
-            <a href="members_men.php"><i class="fas fa-male"></i> Men</a>
-        </li>
+        <li><a href="members_women.php"><i class="fas fa-female"></i> Women</a></li>
+        <li><a href="members_men.php"><i class="fas fa-male"></i> Men</a></li>
     </ul>
 
     <!-- Memberships Dropdown -->
     <a href="#membershipsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-id-badge"></i> Memberships</a>
     <ul class="collapse list-unstyled" id="membershipsSubmenu">
-        <li>
-            <a href="memberships_women.php"><i class="fas fa-female"></i> Women</a>
-        </li>
-        <li>
-            <a href="memberships_men.php"><i class="fas fa-male"></i> Men</a>
-        </li>
+        <li><a href="memberships_women.php"><i class="fas fa-female"></i> Women</a></li>
+        <li><a href="memberships_men.php"><i class="fas fa-male"></i> Men</a></li>
     </ul>
 
-    <!-- Payments -->
-    <a href="payments.php"><i class="fas fa-credit-card"></i> Payments</a>
+    <!-- Payments Dropdown -->
+    <a href="#paymentsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-credit-card"></i> Payments</a>
+    <ul class="collapse list-unstyled" id="paymentsSubmenu">
+        <li><a href="payments_women.php"><i class="fas fa-female"></i> Women</a></li>
+        <li><a href="payments_men.php"><i class="fas fa-male"></i> Men</a></li>
+    </ul>
 
-    <!-- Notifications -->
-    <a href="notifications.php"><i class="fas fa-bell"></i> Notifications</a>
+    <!-- Notifications Dropdown -->
+    <a href="#notificationsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-bell"></i> Notifications</a>
+    <ul class="collapse list-unstyled" id="notificationsSubmenu">
+        <li><a href="notifications_women.php"><i class="fas fa-female"></i> Women</a></li>
+        <li><a href="notifications_men.php"><i class="fas fa-male"></i> Men</a></li>
+    </ul>
 
-    <!-- Insurance -->
-    <a href="insurance.php"><i class="fas fa-shield-alt"></i> Insurance</a>
+    <!-- Insurance Dropdown -->
+    <a href="#insuranceSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-shield-alt"></i> Insurance</a>
+    <ul class="collapse list-unstyled" id="insuranceSubmenu">
+        <li><a href="insurance_women.php"><i class="fas fa-female"></i> Women</a></li>
+        <li><a href="insurance_men.php"><i class="fas fa-male"></i> Men</a></li>
+    </ul>
 
-    <!-- Reports -->
-    <a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a>
+    <!-- Reports Dropdown -->
+    <a href="#reportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-chart-line"></i> Reports</a>
+    <ul class="collapse list-unstyled" id="reportsSubmenu">
+        <li><a href="reports_women.php"><i class="fas fa-female"></i> Women</a></li>
+        <li><a href="reports_men.php"><i class="fas fa-male"></i> Men</a></li>
+    </ul>
 
-    <!-- Profile -->
+    <!-- Profile and Logout -->
     <a href="profile.php"><i class="fas fa-user-circle"></i> Profile</a>
-
-    <!-- Logout -->
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
 
