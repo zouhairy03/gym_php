@@ -258,8 +258,8 @@ $countStmt->close();
             </div>
         <!-- Table to display members -->
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead>
+            <table class="table table-hover ">
+                <thead >
                     <tr>
                         <th>Picture</th>
                         <th>First Name</th>
