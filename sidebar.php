@@ -3,7 +3,7 @@
 
 include 'config.php'; // Database connection
 
-// Queries to get notification counts for expired memberships and pending payments
+// Queries to get notification counts for expired memberships, pending payments, and expired insurance
 $expired_women_query = "
     SELECT COUNT(*) AS expired_count 
     FROM memberships 
@@ -21,6 +21,15 @@ $pending_women_query = "
 ";
 $pending_women_result = $conn->query($pending_women_query);
 $pending_women_count = $pending_women_result->fetch_assoc()['pending_count'];
+
+$expired_insurance_women_query = "
+    SELECT COUNT(*) AS expired_count 
+    FROM insurance 
+    JOIN members ON insurance.member_id = members.member_id 
+    WHERE members.gender = 'female' AND insurance.insurance_expiry_date < CURDATE();
+";
+$expired_insurance_women_result = $conn->query($expired_insurance_women_query);
+$expired_insurance_women_count = $expired_insurance_women_result->fetch_assoc()['expired_count'];
 
 $expired_men_query = "
     SELECT COUNT(*) AS expired_count 
@@ -40,9 +49,18 @@ $pending_men_query = "
 $pending_men_result = $conn->query($pending_men_query);
 $pending_men_count = $pending_men_result->fetch_assoc()['pending_count'];
 
+$expired_insurance_men_query = "
+    SELECT COUNT(*) AS expired_count 
+    FROM insurance 
+    JOIN members ON insurance.member_id = members.member_id 
+    WHERE members.gender = 'male' AND insurance.insurance_expiry_date < CURDATE();
+";
+$expired_insurance_men_result = $conn->query($expired_insurance_men_query);
+$expired_insurance_men_count = $expired_insurance_men_result->fetch_assoc()['expired_count'];
+
 // Calculate total notifications
-$total_women_notifications = $expired_women_count + $pending_women_count;
-$total_men_notifications = $expired_men_count + $pending_men_count;
+$total_women_notifications = $expired_women_count + $pending_women_count + $expired_insurance_women_count;
+$total_men_notifications = $expired_men_count + $pending_men_count + $expired_insurance_men_count;
 
 // Track viewed notifications in session, reset if new notifications are added
 if (!isset($_SESSION['viewed_women_notifications']) || $total_women_notifications > $_SESSION['viewed_women_notifications']) {
@@ -55,6 +73,7 @@ if (!isset($_SESSION['viewed_men_notifications']) || $total_men_notifications > 
 // Determine the count of new notifications
 $new_women_notifications = max(0, $total_women_notifications - $_SESSION['viewed_women_notifications']);
 $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men_notifications']);
+
 ?>
 
 <!DOCTYPE html>
@@ -63,9 +82,8 @@ $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Sidebar</title>
-    <link rel="stylesheet" href="path/to/fontawesome/css/all.min.css"> <!-- Update FontAwesome path -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        /* Sidebar styling */
         .sidebar {
             width: 250px;
             height: 100vh;
@@ -76,7 +94,6 @@ $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men
             overflow-x: hidden;
             transition: all 0.3s ease;
             z-index: 100;
-            font-family: Arial, sans-serif;
         }
 
         .sidebar-header {
@@ -215,7 +232,6 @@ $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men
 
 <script>
     function stopShakeAnimation() {
-        // Remove shake animation class from notification icon
         const notificationIcon = document.querySelector('.notification-icon');
         if (notificationIcon.classList.contains('shake-animation')) {
             notificationIcon.classList.remove('shake-animation');
@@ -223,7 +239,6 @@ $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men
     }
 
     function clearNotification(gender) {
-        // AJAX request to clear notifications
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'clear_notifications.php', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
