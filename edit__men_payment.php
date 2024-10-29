@@ -33,8 +33,18 @@ $payment = $result->fetch_assoc();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         .wrapper { display: flex; width: 100%; align-items: stretch; }
-        .sidebar { width: 250px; background-color: #343a40; padding: 15px; height: 100vh; position: fixed; color: white; transition: all 0.3s ease; }
-        .sidebar.active { left: -250px; }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color:white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+
+        }     .sidebar.active { left: -250px; }
         #content { width: 100%; padding: 20px; margin-left: 250px; transition: all 0.3s ease; }
         #content.active { margin-left: 0; }
         .sidebar-header { font-size: 22px; color: white; margin-bottom: 20px; text-align: center; }

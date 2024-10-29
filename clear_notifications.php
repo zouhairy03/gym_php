@@ -1,21 +1,57 @@
 <?php
-session_start();
+include 'config.php'; // Database connection
 
-if (isset($_POST['gender'])) {
-    // Initialize viewed_notifications session array if not already set
-    if (!isset($_SESSION['viewed_notifications'])) {
-        $_SESSION['viewed_notifications'] = ['women' => 0, 'men' => 0];
-    }
+// Get the gender parameter from the POST request
+$gender = $_POST['gender'] ?? '';
 
-    // Update viewed notifications based on gender
-    if ($_POST['gender'] === 'women') {
-        $_SESSION['viewed_notifications']['women'] = $_SESSION['viewed_notifications']['women'];
-    } elseif ($_POST['gender'] === 'men') {
-        $_SESSION['viewed_notifications']['men'] = $_SESSION['viewed_notifications']['men'];
-    }
-
-    echo json_encode(['status' => 'success', 'message' => 'Notifications cleared']);
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid gender specified']);
+if ($gender === 'women') {
+    // Mark expired memberships as viewed for women
+    $conn->query("
+        UPDATE memberships 
+        JOIN members ON memberships.member_id = members.member_id 
+        SET memberships.shown = 1 
+        WHERE members.gender = 'female' AND memberships.expiry_date < CURDATE() AND memberships.shown = 0
+    ");
+    
+    // Mark pending payments as viewed for women
+    $conn->query("
+        UPDATE payments 
+        JOIN members ON payments.member_id = members.member_id 
+        SET payments.shown = 1 
+        WHERE members.gender = 'female' AND payments.pending_amount > 0 AND payments.shown = 0
+    ");
+    
+    // Mark expired insurance as viewed for women
+    $conn->query("
+        UPDATE insurance 
+        JOIN members ON insurance.member_id = members.member_id 
+        SET insurance.shown = 1 
+        WHERE members.gender = 'female' AND insurance.insurance_expiry_date < CURDATE() AND insurance.shown = 0
+    ");
+    
+} elseif ($gender === 'men') {
+    // Mark expired memberships as viewed for men
+    $conn->query("
+        UPDATE memberships 
+        JOIN members ON memberships.member_id = members.member_id 
+        SET memberships.shown = 1 
+        WHERE members.gender = 'male' AND memberships.expiry_date < CURDATE() AND memberships.shown = 0
+    ");
+    
+    // Mark pending payments as viewed for men
+    $conn->query("
+        UPDATE payments 
+        JOIN members ON payments.member_id = members.member_id 
+        SET payments.shown = 1 
+        WHERE members.gender = 'male' AND payments.pending_amount > 0 AND payments.shown = 0
+    ");
+    
+    // Mark expired insurance as viewed for men
+    $conn->query("
+        UPDATE insurance 
+        JOIN members ON insurance.member_id = members.member_id 
+        SET insurance.shown = 1 
+        WHERE members.gender = 'male' AND insurance.insurance_expiry_date < CURDATE() AND insurance.shown = 0
+    ");
 }
 ?>

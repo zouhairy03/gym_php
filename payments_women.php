@@ -88,7 +88,6 @@ if (isset($_GET['export_excel'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         .wrapper { display: flex; width: 100%; align-items: stretch; }
-        .sidebar { width: 250px; background-color: #343a40; padding: 15px; height: 100vh; position: fixed; color: white; transition: all 0.3s ease; }
         .content { width: 100%; padding: 20px; margin-left: 250px; transition: all 0.3s ease; }
         .sidebar-header { font-size: 22px; color: white; margin-bottom: 20px; text-align: center; }
         .image-member { width: 50px; height: 50px; object-fit: cover; border-radius: 50%; }
@@ -96,15 +95,17 @@ if (isset($_GET['export_excel'])) {
         .status-completed { color: green; }
         .status-pending { color: orange; }
         .sidebar {
-    width: 250px;
-    background-color: #343a40;
-    padding: 15px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    transition: all 0.3s ease;
-    z-index: 1000; /* Ensure the sidebar appears above other elements */
-}
+            width: 250px;
+            height: 100vh;
+            background-color:white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+
+        }
 
 .sidebar.active {
     transform: translateX(-100%); /* Hide the sidebar by moving it off-screen */
@@ -133,10 +134,10 @@ if (isset($_GET['export_excel'])) {
 <button id="sidebarCollapse" class="btn btn-info">
     <i class="fas fa-bars"></i>
 </button>
-        <h2 class="mt-4 text-center"><i class="fas fa-credit-card"></i> Women's Payments</h2>
+        <h2 class="mt-4 text-center" style="background: pink;color: white;"><i class="fas fa-credit-card"></i> Women's Payments</h2>
 
         <!-- Add Payment Button to Trigger Modal -->
-        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addPaymentModal">
+        <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#addPaymentModal">
             <i class="fas fa-plus"></i> Add Payment
         </button>
 
@@ -262,7 +263,7 @@ if (isset($_GET['export_excel'])) {
                     </div>
                     <div class="form-group">
                         <label for="pendingAmount">Pending Amount (MAD)</label>
-                        <input type="number" class="form-control" id="pendingAmount" name="pending_amount" required>
+                        <input type="number" class="form-control" id="pendingAmount" name="pending_amount" >
                     </div>
                     <div class="form-group">
                         <label for="paymentDate">Payment Date</label>

@@ -47,8 +47,18 @@ $stmt->close();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         .wrapper { display: flex; width: 100%; align-items: stretch; }
-        .sidebar { width: 250px; background-color: #343a40; padding: 15px; height: 100vh; position: fixed; color: white; transition: all 0.3s ease; }
-        .content { width: 100%; padding: 20px; margin-left: 250px; transition: all 0.3s ease; }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color:white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+
+        }        .content { width: 100%; padding: 20px; margin-left: 250px; transition: all 0.3s ease; }
         .sidebar.active { transform: translateX(-100%); } /* Hides sidebar */
         .content.active { margin-left: 0; } /* Adjusts content margin */
         .status-active { color: white; background-color: green; padding: 5px 10px; border-radius: 12px; }

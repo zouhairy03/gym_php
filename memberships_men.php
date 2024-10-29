@@ -86,8 +86,18 @@ if (isset($_GET['export_excel'])) {
     <style>
         /* Sidebar and main content styling */
         .wrapper { display: flex; width: 100%; align-items: stretch; }
-        .sidebar { width: 250px; background-color: #343a40; padding: 15px; height: 100vh; position: fixed; color: white; transition: all 0.3s ease; }
-        .sidebar.active { left: -250px; }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color:white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+
+        }        .sidebar.active { left: -250px; }
         #content { width: 100%; padding: 20px; margin-left: 250px; transition: all 0.3s ease; }
         #content.active { margin-left: 0; }
         .actions, .filter-section, .pagination { justify-content: center; }
@@ -106,8 +116,8 @@ if (isset($_GET['export_excel'])) {
     <i class="fas fa-bars"></i>
 </button>
         <div class="container">
-        <h2 class="mt-4 text-center">
-    <i class="fas fa-male"></i> men's Memberships
+        <h2 class="mt-4 text-center" style="background: lightblue;color: white;">
+    <i class="fas fa-male"></i> Men Memberships
 </h2>
 
             <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#addMembershipModal">

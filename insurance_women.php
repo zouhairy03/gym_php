@@ -75,8 +75,18 @@ if (isset($_GET['export_excel'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         .wrapper { display: flex; width: 100%; align-items: stretch; }
-        .sidebar { width: 250px; background-color: #343a40; padding: 15px; height: 100vh; position: fixed; color: white; transition: all 0.3s ease; }
-        .content { width: 100%; padding: 20px; margin-left: 250px; transition: all 0.3s ease; }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color:white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+
+        }        .content { width: 100%; padding: 20px; margin-left: 250px; transition: all 0.3s ease; }
         .image-member { width: 50px; height: 50px; object-fit: cover; border-radius: 50%; }
         .pagination { justify-content: center; }
         .sidebar.active { transform: translateX(-100%); } /* Hides sidebar */
@@ -124,7 +134,7 @@ if (isset($_GET['export_excel'])) {
         <!-- Insurance Table -->
         <div class="table-responsive">
             <table class="table table-hover">
-                <thead class="thead-dark">
+                <thead class="thead">
                     <tr>
                         <th>Picture</th>
                         <th>First Name</th>

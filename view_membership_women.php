@@ -52,7 +52,9 @@ $membership = $result->fetch_assoc();
 
     <!-- Page Content -->
     <div id="content">
-        <button id="sidebarCollapse" class="btn btn-info">Toggle Sidebar</button>
+        <button id="sidebarCollapse" class="btn btn-info">
+            <i class="fas fa-align-left"></i>
+        </button>
         
         <div class="container">
         <h2 class="mt-4 text-center">View Membership - <?php echo $membership['first_name'] . " " . $membership['last_name']; ?></h2>

@@ -68,70 +68,104 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        body { background-color: #f4f6f9; font-family: 'Arial', sans-serif; }
-        .profile-container { max-width: 700px; margin: 50px auto; }
+        body {  font-family: 'Arial', sans-serif; overflow-x: hidden; }
+        .sidebar { width: 250px; height: 100vh; position: fixed; background-color: #343a40; transition: 0.5s; left: 0; }
+        .sidebar.active { width: 0; }
+        .sidebar ul { padding: 0; list-style: none; }
+        .sidebar ul li { padding: 15px; }
+        .sidebar ul li a { color: #fff; display: block; text-decoration: none; }
+        .sidebar ul li a:hover { background-color: #007bff; transition: 0.3s; }
+        .content { margin-left: 250px; transition: margin-left 0.5s; }
+        .content.active { margin-left: 0; }
+        .profile-container { max-width: 700px; margin: 50px auto; animation: fadeIn 0.6s ease; }
         .card { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; }
         .profile-image { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; }
         .icon-container { font-size: 1.1em; color: #343a40; }
         .eye-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666; cursor: pointer; }
-        .form-control:focus { box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5); border-color: #80bdff; }
-        h3 { font-family: 'Helvetica Neue', sans-serif; color:black; }
+        .form-control:focus { box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5); border-color: #80bdff; transition: 0.3s; }
+        h3 { font-family: 'Helvetica Neue', sans-serif; color: black; }
         .btn-primary { background-color: #007bff; border: none; }
         .btn-secondary { background-color: #6c757d; border: none; }
+        .btn-group { display: flex; gap: 10px; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Apply animation to welcome message */
+        .welcome-message {
+            animation: fadeInUp 1s ease-in-out forwards;
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
 
-<?php include 'sidebar.php'; ?>
+<!-- Sidebar -->
+<?php include'sidebar.php' ?>
 
-<div class="profile-container">
-    <div class="card">
-        <div class="card-header text-center">
-            <h3><i class="fas fa-user-circle"></i> Admin Profile</h3>
-        </div>
-        <div class="card-body">
-            <?php if (isset($_SESSION['success'])): ?>
-                <div class="alert alert-success"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['error'])): ?>
-                <div class="alert alert-danger"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
-            <?php endif; ?>
-
-            <div class="text-center mb-4">
-                <img src="<?php echo $admin_data['profile_picture'] ?? 'default_profile.jpg'; ?>" alt="Profile Picture" class="profile-image mb-2">
-                <h5><?php echo htmlspecialchars($admin_data['username']); ?></h5>
+<!-- Content -->
+<div class="content" id="content">
+    <button id="sidebarCollapse" class="btn btn-info mt-3 ml-3"><i class="fas fa-bars"></i></button>
+    
+    <!-- Welcome Message with Animation -->
+  
+    <div class="profile-container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3><i class="fas fa-user-circle"></i> Admin Profile</h3>
             </div>
-            <form method="POST" enctype="multipart/form-data">
-                <!-- Username -->
-                <div class="form-group">
-                    <label><i class="fas fa-user icon-container"></i> Username</label>
-                    <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($admin_data['username']); ?>" required>
-                </div>
+            <div class="card-body">
+                <?php if (isset($_SESSION['success'])): ?>
+                    <div class="alert alert-success"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert alert-danger"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
+                <?php endif; ?>
 
-                <!-- Profile Picture -->
-                <div class="form-group">
-                    <label><i class="fas fa-image icon-container"></i> Profile Picture</label>
-                    <input type="file" name="profile_picture" class="form-control">
+                <div class="text-center mb-4">
+                    <img src="<?php echo $admin_data['profile_picture'] ?? 'default_profile.jpg'; ?>" alt="Profile Picture" class="profile-image mb-2">
+                    <h5><?php echo htmlspecialchars($admin_data['username']); ?></h5>
                 </div>
+                <form method="POST" enctype="multipart/form-data">
+                    <!-- Username -->
+                    <div class="form-group">
+                        <label><i class="fas fa-user icon-container"></i> Username</label>
+                        <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($admin_data['username']); ?>" required>
+                    </div>
 
-                <!-- Password Change Fields with Eye Icon for Visibility Toggle -->
-                <div class="form-group position-relative">
-                    <label><i class="fas fa-lock icon-container"></i> New Password</label>
-                    <input type="password" name="new_password" class="form-control" id="new_password">
-                    <i class="fas fa-eye eye-icon" onclick="togglePasswordVisibility('new_password')"></i>
-                </div>
-                <div class="form-group position-relative">
-                    <label><i class="fas fa-lock icon-container"></i> Confirm New Password</label>
-                    <input type="password" name="confirm_password" class="form-control" id="confirm_password">
-                    <i class="fas fa-eye eye-icon" onclick="togglePasswordVisibility('confirm_password')"></i>
-                </div>
+                    <!-- Profile Picture -->
+                    <div class="form-group">
+                        <label><i class="fas fa-image icon-container"></i> Profile Picture</label>
+                        <input type="file" name="profile_picture" class="form-control">
+                    </div>
 
-                <!-- Button Group -->
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="submit" class="btn btn-primary w-100 mr-2">Update Profile</button>
-                    <a href="dashboard.php" class="btn btn-secondary w-100 ml-2">Cancel</a>
-                </div>
-            </form>
+                    <!-- Password Change Fields with Eye Icon for Visibility Toggle -->
+                    <div class="form-group position-relative">
+                        <label><i class="fas fa-lock icon-container"></i> New Password</label>
+                        <input type="password" name="new_password" class="form-control" id="new_password">
+                        <i class="fas fa-eye eye-icon" onclick="togglePasswordVisibility('new_password')"></i>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label><i class="fas fa-lock icon-container"></i> Confirm New Password</label>
+                        <input type="password" name="confirm_password" class="form-control" id="confirm_password">
+                        <i class="fas fa-eye eye-icon" onclick="togglePasswordVisibility('confirm_password')"></i>
+                    </div>
+
+                    <!-- Button Group -->
+                    <div class="btn-group mt-4">
+                        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                        <a href="dashboard.php" class="btn btn-secondary w-100">Cancel</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -140,6 +174,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Sidebar toggle with animation
+    document.getElementById('sidebarCollapse').addEventListener('click', function () {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('content').classList.toggle('active');
+    });
+
     // Toggle password visibility
     function togglePasswordVisibility(inputId) {
         const input = document.getElementById(inputId);

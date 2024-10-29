@@ -7,3 +7,23 @@ add Link color
       An example alert with an icon
     </div>
   </div>
+
+
+
+  <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#addInsuranceModal">
+    .wrapper { display: flex; width: 100%; align-items: stretch; }
+    .sidebar { width: 250px; background-color: #343a40; padding: 15px; height: 100vh; position: fixed; color: white; transition: all 0.3s ease; }
+
+    -- Empty and reset the memberships table
+TRUNCATE TABLE memberships;
+
+-- Empty and reset the insurance table
+TRUNCATE TABLE insurance;
+
+-- Empty and reset the payments table
+TRUNCATE TABLE payments;
+
+-- Add similar TRUNCATE commands for any other tables as needed
+TRUNCATE TABLE reports;
+TRUNCATE TABLE notifications;
+TRUNCATE table members;

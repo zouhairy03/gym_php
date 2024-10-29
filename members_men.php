@@ -105,7 +105,7 @@ $countStmt->close();
             min-height: 100vh;
             margin: 0;
             display: flex;
-            background-color: #f8f9fa;
+            /* background-color: #f8f9fa; */
         }
 
         .wrapper {
@@ -115,12 +115,15 @@ $countStmt->close();
 
         .sidebar {
             width: 250px;
-            background-color: #343a40;
-            padding: 20px;
-            position: fixed;
             height: 100vh;
-            transition: all 0.3s ease;
+            background-color:white;
+            position: fixed;
             left: 0;
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+
         }
 
         .sidebar a {
@@ -216,9 +219,13 @@ $countStmt->close();
     <?php include 'sidebar.php'; ?>
     <!-- Content -->
     <div class="content">
-    <button class="btn btn-secondary mb-3" id="toggleSidebar">Toggle Sidebar</button>
+    <button id="toggleSidebar" class="btn btn-info">
+    <i class="fas fa-bars"></i>
+</button>
 
-        <h2 class="my-4" style="text-align: center;">men Members</h2>
+<h2 class="my-4" style="text-align: center;background: lightblue;color: white;">
+    <i class="fas fa-male" style="margin-right: 8px;"></i> Men Members
+</h2>
         
         <!-- Add New Member Button -->
         <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#addMemberModal">
@@ -258,7 +265,7 @@ $countStmt->close();
             </div>
         <!-- Table to display members -->
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
+            <table class="table table-hover ">
                 <thead>
                     <tr>
                         <th>Picture</th>

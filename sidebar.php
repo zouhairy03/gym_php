@@ -1,14 +1,14 @@
 <?php
-// Start session and include necessary files
 
 include 'config.php'; // Database connection
 
-// Queries to get notification counts for expired memberships, pending payments, and expired insurance
+// Fetch counts for expired memberships, pending payments, and expired insurance (unviewed only)
+
 $expired_women_query = "
     SELECT COUNT(*) AS expired_count 
     FROM memberships 
     JOIN members ON memberships.member_id = members.member_id 
-    WHERE members.gender = 'female' AND memberships.expiry_date < CURDATE();
+    WHERE members.gender = 'female' AND memberships.expiry_date < CURDATE() AND memberships.shown = 0;
 ";
 $expired_women_result = $conn->query($expired_women_query);
 $expired_women_count = $expired_women_result->fetch_assoc()['expired_count'];
@@ -17,7 +17,7 @@ $pending_women_query = "
     SELECT COUNT(*) AS pending_count 
     FROM payments 
     JOIN members ON payments.member_id = members.member_id 
-    WHERE members.gender = 'female' AND payments.pending_amount > 0;
+    WHERE members.gender = 'female' AND payments.pending_amount > 0 AND payments.shown = 0;
 ";
 $pending_women_result = $conn->query($pending_women_query);
 $pending_women_count = $pending_women_result->fetch_assoc()['pending_count'];
@@ -26,7 +26,7 @@ $expired_insurance_women_query = "
     SELECT COUNT(*) AS expired_count 
     FROM insurance 
     JOIN members ON insurance.member_id = members.member_id 
-    WHERE members.gender = 'female' AND insurance.insurance_expiry_date < CURDATE();
+    WHERE members.gender = 'female' AND insurance.insurance_expiry_date < CURDATE() AND insurance.shown = 0;
 ";
 $expired_insurance_women_result = $conn->query($expired_insurance_women_query);
 $expired_insurance_women_count = $expired_insurance_women_result->fetch_assoc()['expired_count'];
@@ -35,7 +35,7 @@ $expired_men_query = "
     SELECT COUNT(*) AS expired_count 
     FROM memberships 
     JOIN members ON memberships.member_id = members.member_id 
-    WHERE members.gender = 'male' AND memberships.expiry_date < CURDATE();
+    WHERE members.gender = 'male' AND memberships.expiry_date < CURDATE() AND memberships.shown = 0;
 ";
 $expired_men_result = $conn->query($expired_men_query);
 $expired_men_count = $expired_men_result->fetch_assoc()['expired_count'];
@@ -44,7 +44,7 @@ $pending_men_query = "
     SELECT COUNT(*) AS pending_count 
     FROM payments 
     JOIN members ON payments.member_id = members.member_id 
-    WHERE members.gender = 'male' AND payments.pending_amount > 0;
+    WHERE members.gender = 'male' AND payments.pending_amount > 0 AND payments.shown = 0;
 ";
 $pending_men_result = $conn->query($pending_men_query);
 $pending_men_count = $pending_men_result->fetch_assoc()['pending_count'];
@@ -53,27 +53,14 @@ $expired_insurance_men_query = "
     SELECT COUNT(*) AS expired_count 
     FROM insurance 
     JOIN members ON insurance.member_id = members.member_id 
-    WHERE members.gender = 'male' AND insurance.insurance_expiry_date < CURDATE();
+    WHERE members.gender = 'male' AND insurance.insurance_expiry_date < CURDATE() AND insurance.shown = 0;
 ";
 $expired_insurance_men_result = $conn->query($expired_insurance_men_query);
 $expired_insurance_men_count = $expired_insurance_men_result->fetch_assoc()['expired_count'];
 
-// Calculate total notifications
-$total_women_notifications = $expired_women_count + $pending_women_count + $expired_insurance_women_count;
-$total_men_notifications = $expired_men_count + $pending_men_count + $expired_insurance_men_count;
-
-// Track viewed notifications in session, reset if new notifications are added
-if (!isset($_SESSION['viewed_women_notifications']) || $total_women_notifications > $_SESSION['viewed_women_notifications']) {
-    $_SESSION['viewed_women_notifications'] = 0;
-}
-if (!isset($_SESSION['viewed_men_notifications']) || $total_men_notifications > $_SESSION['viewed_men_notifications']) {
-    $_SESSION['viewed_men_notifications'] = 0;
-}
-
-// Determine the count of new notifications
-$new_women_notifications = max(0, $total_women_notifications - $_SESSION['viewed_women_notifications']);
-$new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men_notifications']);
-
+// Calculate total new notifications for women and men
+$new_women_notifications = $expired_women_count + $pending_women_count + $expired_insurance_women_count;
+$new_men_notifications = $expired_men_count + $pending_men_count + $expired_insurance_men_count;
 ?>
 
 <!DOCTYPE html>
@@ -84,16 +71,19 @@ $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men
     <title>Admin Sidebar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
+        
+        /* Sidebar styling */
         .sidebar {
             width: 250px;
             height: 100vh;
-            background-color: #f8f9fa;
+            background-color:white;
             position: fixed;
             left: 0;
             top: 0;
             overflow-x: hidden;
             transition: all 0.3s ease;
             z-index: 100;
+
         }
 
         .sidebar-header {
@@ -157,14 +147,14 @@ $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
+
+        
     </style>
 </head>
 <body>
 
 <div class="sidebar" id="sidebar">
 
-    <img src="path/to/admin_image.jpg" alt="Admin Image" class="admin-image"> <!-- Replace path with actual image path -->
-    <div class="welcome-message">Welcome, Admin</div>
     <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard </a>
 
     <!-- Members Dropdown -->
@@ -246,10 +236,8 @@ $new_men_notifications = max(0, $total_men_notifications - $_SESSION['viewed_men
 
         if (gender === 'women') {
             document.getElementById('womenNotifCount').style.display = 'none';
-            <?php $_SESSION['viewed_women_notifications'] = $total_women_notifications; ?>
         } else if (gender === 'men') {
             document.getElementById('menNotifCount').style.display = 'none';
-            <?php $_SESSION['viewed_men_notifications'] = $total_men_notifications; ?>
         }
     }
 </script>

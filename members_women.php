@@ -105,24 +105,25 @@ $countStmt->close();
             min-height: 100vh;
             margin: 0;
             display: flex;
-            background-color: #f8f9fa;
+            /* background-color: #f8f9fa; */
         }
 
         .wrapper {
             display: flex;
             width: 100%;
         }
-
         .sidebar {
             width: 250px;
-            background-color: #343a40;
-            padding: 20px;
-            position: fixed;
             height: 100vh;
-            transition: all 0.3s ease;
+            background-color:white;
+            position: fixed;
             left: 0;
-        }
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
 
+        }
         .sidebar a {
             color: white;
             padding: 10px;
@@ -216,9 +217,15 @@ $countStmt->close();
     <?php include 'sidebar.php'; ?>
     <!-- Content -->
     <div class="content">
-    <button class="btn btn-secondary mb-3" id="toggleSidebar">Toggle Sidebar</button>
+  
 
-        <h2 class="my-4" style="text-align: center;">Women Members</h2>
+<button id="toggleSidebar" class="btn btn-info">
+    <i class="fas fa-bars"></i>
+</button>
+
+<h2 class="my-4" style="text-align: center;background: pink;color: white;">
+    <i class="fas fa-female" style="margin-right: 8px;" ></i> Women Members
+</h2>
         
         <!-- Add New Member Button -->
         <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#addMemberModal">
@@ -254,7 +261,7 @@ $countStmt->close();
             </div>
         </form>
         <div class="col-md-2">
-            <a href="export_men_excel.php" class="btn btn-success"><i class="fas fa-file-excel"></i> Export to Excel</a>
+            <a href="export_women_excel.php" class="btn btn-success"><i class="fas fa-file-excel"></i> Export to Excel</a>
             </div>
         <!-- Table to display members -->
         <div class="table-responsive">

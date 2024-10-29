@@ -50,14 +50,16 @@ if (!$member) {
 
         .sidebar {
             width: 250px;
-            background-color: #343a40;
-            padding: 20px;
-            position: fixed;
             height: 100vh;
-            transition: all 0.3s ease;
+            background-color:white;
+            position: fixed;
             left: 0;
-        }
+            top: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
 
+        }
         .sidebar a {
             color: white;
             padding: 10px;
@@ -122,7 +124,9 @@ if (!$member) {
 
     <!-- Content -->
     <div class="content">
-    <button class="btn btn-secondary mb-3" id="toggleSidebar">Toggle Sidebar</button>
+    <button class="btn btn-info mb-3" id="toggleSidebar">
+        <i class="fas fa-bars"></i>
+    </button>
     <div class="profile-container" style="text-align: center;">
         <h2>View Member - <?php echo htmlspecialchars($member['first_name'] . ' ' . $member['last_name']); ?></h2>
 

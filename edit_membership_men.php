@@ -79,13 +79,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .sidebar {
             width: 250px;
-            background-color: #343a40;
-            padding: 15px;
             height: 100vh;
+            background-color:white;
             position: fixed;
             left: 0;
+            top: 0;
+            overflow-x: hidden;
             transition: all 0.3s ease;
-            color: white;
+            z-index: 100;
+
         }
 
         .sidebar.active {
@@ -123,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Page Content -->
     <div id="content">
-        <button id="sidebarCollapse" class="btn btn-info mb-4 toggle-btn"><i class="fas fa-bars"></i> Toggle Sidebar</button>
+        <button id="sidebarCollapse" class="btn btn-info mb-4 toggle-btn"><i class="fas fa-bars"></i> </button>
 
         <div class="container">
             <h2 class="content-header">Edit Membership for <?php echo $membership['first_name'] . " " . $membership['last_name']; ?></h2>

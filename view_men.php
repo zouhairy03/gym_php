@@ -122,7 +122,9 @@ if (!$member) {
 
     <!-- Content -->
     <div class="content">
-    <button class="btn btn-secondary mb-3" id="toggleSidebar">Toggle Sidebar</button>
+    <button class="btn btn-info mb-3" id="toggleSidebar">
+        <i class="fas fa-bars"></i>
+    </button>
     <div class="profile-container" style="text-align: center;">
         <h2>View Member - <?php echo htmlspecialchars($member['first_name'] . ' ' . $member['last_name']); ?></h2>
 
