@@ -23,6 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
+    // Check if new password and confirm password match
+    if (!empty($new_password) && $new_password !== $confirm_password) {
+        $_SESSION['error'] = "The new password and confirmation password do not match.";
+        header("Location: profile.php");
+        exit();
+    }
+
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
         $target_dir = "uploads/members/admin/";
         $file_name = basename($_FILES['profile_picture']['name']);
@@ -45,10 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
     $stmt->close();
 
-    if (!empty($new_password) && ($new_password === $confirm_password)) {
+    if (!empty($new_password)) {
         $update_password_query = "UPDATE admin SET password = ? WHERE admin_id = ?";
         $stmt = $conn->prepare($update_password_query);
-        $stmt->bind_param("si", $new_password, $admin_id);
+        $stmt->bind_param("si", $new_password, $admin_id); // No hashing
         $stmt->execute();
         $stmt->close();
     }
@@ -68,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        body {  font-family: 'Arial', sans-serif; overflow-x: hidden; }
+        body { font-family: 'Arial', sans-serif; overflow-x: hidden; }
         .sidebar { width: 250px; height: 100vh; position: fixed; background-color: #343a40; transition: 0.5s; left: 0; }
         .sidebar.active { width: 0; }
         .sidebar ul { padding: 0; list-style: none; }
@@ -89,34 +96,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .btn-group { display: flex; gap: 10px; }
 
         /* Animations */
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-
-        /* Apply animation to welcome message */
-        .welcome-message {
-            animation: fadeInUp 1s ease-in-out forwards;
-            opacity: 0;
         }
     </style>
 </head>
 <body>
 
 <!-- Sidebar -->
-<?php include'sidebar.php' ?>
+<?php include 'sidebar.php'; ?>
 
 <!-- Content -->
 <div class="content" id="content">
     <button id="sidebarCollapse" class="btn btn-info mt-3 ml-3"><i class="fas fa-bars"></i></button>
-    
-    <!-- Welcome Message with Animation -->
-  
+
     <div class="profile-container">
         <div class="card">
             <div class="card-header text-center">
@@ -147,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="file" name="profile_picture" class="form-control">
                     </div>
 
-                    <!-- Password Change Fields with Eye Icon for Visibility Toggle -->
+                    <!-- New Password -->
                     <div class="form-group position-relative">
                         <label><i class="fas fa-lock icon-container"></i> New Password</label>
                         <input type="password" name="new_password" class="form-control" id="new_password">
